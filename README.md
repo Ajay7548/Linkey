@@ -2,7 +2,7 @@
 
 A modern URL shortener application built with Next.js, PostgreSQL (Neon), and Tailwind CSS. Create short links with custom codes, track clicks, and manage your links with an intuitive dashboard.
 
-🔗 **Live Demo**: [Live Preview][(tinylink-three-lyart.vercel.app)]
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](tinylink-three-lyart.vercel.app)
 
 ## Features
 
