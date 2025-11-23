@@ -2,11 +2,17 @@
 
 A modern URL shortener application built with Next.js, PostgreSQL (Neon), and Tailwind CSS. Create short links with custom codes, track clicks, and manage your links with an intuitive dashboard.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen?style=for-the-badge)](tinylink-three-lyart.vercel.app)
+## 🚀 Live Demo
 
-## Features
+**[👉 Try TinyLink Live](https://tinylink-three-lyart.vercel.app)**
 
-- ✨ Create short links with custom codes (6-8 alphanumeric characters)
+Experience the application in action! Create short links, track clicks, and manage your URLs in real-time.
+
+---
+
+## ✨ Features
+
+- 🔗 Create short links with custom codes (6-8 alphanumeric characters)
 - 📊 Track click statistics and last clicked time
 - 🔍 Search and filter links
 - 📱 Responsive design (mobile and desktop)
@@ -15,7 +21,7 @@ A modern URL shortener application built with Next.js, PostgreSQL (Neon), and Ta
 - ⚡ Real-time click tracking
 - 🏥 Health check endpoint for monitoring
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Framework**: Next.js 16 (App Router)
 - **Database**: PostgreSQL (Neon)
@@ -23,7 +29,7 @@ A modern URL shortener application built with Next.js, PostgreSQL (Neon), and Ta
 - **Language**: TypeScript
 - **Deployment**: Vercel
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 
