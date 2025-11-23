@@ -1,6 +1,8 @@
 "use client";
 
+import NextLink from "next/link";
 import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Link as LinkIcon,
   Search,
@@ -13,6 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/lib/types";
 import { toast } from "sonner";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 interface LinksTableProps {
   links: Link[];
@@ -27,11 +30,14 @@ export default function LinksTable({
   onDelete,
   onAddClick,
 }: LinksTableProps) {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [deletingCode, setDeletingCode] = useState<string | null>(null);
   const [baseUrl, setBaseUrl] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("code");
+  const [linkToDelete, setLinkToDelete] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
     setBaseUrl(window.location.origin);
@@ -81,17 +87,25 @@ export default function LinksTable({
     }
   };
 
-  const handleDelete = async (code: string) => {
-    setDeletingCode(code);
+  const handleDeleteClick = (code: string) => {
+    setLinkToDelete(code);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!linkToDelete) return;
+
+    setDeletingCode(linkToDelete);
 
     try {
-      const response = await fetch(`/api/links/${code}`, {
+      const response = await fetch(`/api/links/${linkToDelete}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
         toast.success("Link deleted successfully");
         onDelete();
+        setIsDeleteModalOpen(false);
       } else {
         const errorData = await response.json();
         console.error("Error data:", errorData);
@@ -102,12 +116,29 @@ export default function LinksTable({
       alert("Network error");
     } finally {
       setDeletingCode(null);
+      setLinkToDelete(null);
     }
   };
 
   const truncateUrl = (url: string, maxLength: number = 40) => {
     if (url.length <= maxLength) return url;
     return url.substring(0, maxLength) + "...";
+  };
+
+  const getInitials = (code: string) => code.substring(0, 2).toUpperCase();
+
+  const getColor = (code: string) => {
+    const colors = [
+      "bg-indigo-600",
+      "bg-purple-600",
+      "bg-pink-600",
+      "bg-blue-600",
+      "bg-violet-600",
+    ];
+    const index =
+      code.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
+      colors.length;
+    return colors[index];
   };
 
   return (
@@ -221,73 +252,118 @@ export default function LinksTable({
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {processedLinks.map((link) => (
-            <div
-              key={link.id}
-              className="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group p-6"
-            >
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <a
-                      href={`/code/${link.code}`}
-                      className="text-lg font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
-                    >
-                      {link.code}
-                    </a>
-                    <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-full">
+        <div className="overflow-x-auto">
+          <table className="w-full border-separate border-spacing-y-3">
+            <thead>
+              <tr className="text-left text-slate-500 text-sm font-semibold">
+                <th className="pb-2 pl-6">Short Code</th>
+                <th className="pb-2">Target URL</th>
+                <th className="pb-2 text-center">Clicks</th>
+                <th className="pb-2">Last Clicked</th>
+                <th className="pb-2 pr-6 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {processedLinks.map((link) => (
+                <tr
+                  key={link.id}
+                  className="group cursor-pointer"
+                  onClick={() => router.push(`/code/${link.code}`)}
+                >
+                  <td className="bg-white rounded-l-2xl py-4 pl-6 border-y border-l border-slate-100 group-hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-10 h-10 rounded-xl ${getColor(
+                          link.code
+                        )} flex items-center justify-center text-white font-bold text-sm shadow-sm`}
+                      >
+                        {getInitials(link.code)}
+                      </div>
+                      <NextLink
+                        href={`/code/${link.code}`}
+                        className="font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {link.code}
+                      </NextLink>
+                    </div>
+                  </td>
+                  <td className="bg-white py-4 border-y border-slate-100 group-hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-2 text-slate-500 max-w-xs">
+                      <LinkIcon className="w-4 h-4 flex-shrink-0 opacity-50" />
+                      <NextLink
+                        href={link.target_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="truncate hover:text-indigo-600 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {truncateUrl(link.target_url, 40)}
+                      </NextLink>
+                    </div>
+                  </td>
+                  <td className="bg-white py-4 text-center border-y border-slate-100 group-hover:shadow-sm transition-all">
+                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold rounded-full text-sm">
                       {link.clicks}
                     </span>
-                  </div>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => copyToClipboard(link.code)}
-                      className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                      title="Copy"
-                    >
-                      {copiedCode === link.code ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Copy className="w-4 h-4" />
-                      )}
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(link.code);
-                      }}
-                      disabled={deletingCode === link.code}
-                      className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <a
-                    href={link.target_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-slate-500 hover:text-indigo-600 truncate block transition-colors"
-                  >
-                    {truncateUrl(link.target_url, 30)}
-                  </a>
-                  <p className="text-xs text-slate-400 mt-1">
-                    {link.last_clicked
-                      ? `Last clicked ${new Date(
-                          link.last_clicked
-                        ).toLocaleDateString()}`
-                      : "No clicks yet"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+                  </td>
+                  <td className="bg-white py-4 border-y border-slate-100 group-hover:shadow-sm transition-all">
+                    <span className="text-slate-500 text-sm">
+                      {link.last_clicked
+                        ? new Date(link.last_clicked).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )
+                        : "-"}
+                    </span>
+                  </td>
+                  <td className="bg-white rounded-r-2xl py-4 pr-6 text-right border-y border-r border-slate-100 group-hover:shadow-sm transition-all">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          copyToClipboard(link.code);
+                        }}
+                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                        title="Copy Link"
+                      >
+                        {copiedCode === link.code ? (
+                          <Check className="w-4 h-4" />
+                        ) : (
+                          <Copy className="w-4 h-4" />
+                        )}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(link.code);
+                        }}
+                        disabled={deletingCode === link.code}
+                        className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title="Delete Link"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        linkCode={linkToDelete}
+        isDeleting={!!deletingCode}
+      />
     </div>
   );
 }

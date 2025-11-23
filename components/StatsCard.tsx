@@ -1,5 +1,5 @@
 "use client";
-
+import NextLink from "next/link";
 import { Link } from "@/lib/types";
 import { useState, useEffect } from "react";
 import { Check, Copy } from "lucide-react";
@@ -87,14 +87,14 @@ export default function StatsCard({ link }: StatsCardProps) {
             Target URL
           </label>
           <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 break-all">
-            <a
+            <NextLink
               href={link.target_url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-indigo-600 hover:text-indigo-700 font-medium hover:underline"
             >
               {link.target_url}
-            </a>
+            </NextLink>
           </div>
         </div>
 

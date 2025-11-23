@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Link as LinkIcon, Github } from "lucide-react";
 
 export default function Header() {
@@ -25,27 +26,21 @@ export default function Header() {
 
           {/* Navigation */}
           <nav className="flex items-center gap-1">
-            <a
+            <Link
               href="/"
               className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all duration-200"
             >
               Dashboard
-            </a>
-            <a
-              href="/healthz"
-              className="px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all duration-200"
-            >
-              Health
-            </a>
+            </Link>
             <div className="w-px h-6 bg-slate-200 mx-2"></div>
-            <a
+            <Link
               href="https://github.com/Ajay7548/Linkey"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all duration-200"
             >
               <Github className="w-5 h-5" />
-            </a>
+            </Link>
           </nav>
         </div>
       </div>

@@ -14,7 +14,7 @@ async function ensureDbInitialized() {
 // GET /api/links/:code - Get stats for a specific link
 export async function GET(
   request: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
   try {
     await ensureDbInitialized();
@@ -42,7 +42,7 @@ export async function GET(
 // DELETE /api/links/:code - Delete a link
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ) {
   try {
     await ensureDbInitialized();

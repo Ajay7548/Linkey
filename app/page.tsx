@@ -41,31 +41,6 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen pb-20">
-      {/* Hero Section */}
-      <div className="bg-white border-b border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="text-center max-w-3xl mx-auto animate-enter">
-            <h1 className="text-5xl sm:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight">
-              Shorten Your <span className="text-gradient">Links</span>,
-              <br />
-              Expand Your <span className="text-gradient">Reach</span>
-            </h1>
-            <p className="text-xl text-slate-600 mb-10 leading-relaxed">
-              A powerful, modern URL shortener designed for performance and
-              simplicity. Track clicks, manage links, and analyze your traffic
-              in real-time.
-            </p>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="btn-primary text-lg px-8 py-4 shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40"
-            >
-              <Plus className="w-6 h-6" />
-              Create New Link
-            </button>
-          </div>
-        </div>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Loading State */}
         {loading && (
