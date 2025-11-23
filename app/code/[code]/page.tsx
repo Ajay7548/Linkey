@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import StatsCard from "@/components/StatsCard";
 import { getLinkByCode, initializeDatabase } from "@/lib/db";
+import { ArrowLeft } from "lucide-react";
 
 interface StatsPageProps {
   params: Promise<{
@@ -26,19 +27,7 @@ export default async function StatsPage({ params }: StatsPageProps) {
             href="/"
             className="inline-flex items-center text-purple-600 hover:text-purple-800 font-semibold transition-colors group"
           >
-            <svg
-              className="w-6 h-6 mr-2 group-hover:-translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              />
-            </svg>
+            <ArrowLeft className="w-6 h-6 mr-2 group-hover:-translate-x-1 transition-transform" />
             Back to Dashboard
           </a>
         </div>

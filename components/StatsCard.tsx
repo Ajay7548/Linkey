@@ -2,6 +2,7 @@
 
 import { Link } from "@/lib/types";
 import { useState, useEffect } from "react";
+import { Check, Copy } from "lucide-react";
 
 interface StatsCardProps {
   link: Link;
@@ -71,33 +72,9 @@ export default function StatsCard({ link }: StatsCardProps) {
                 title="Copy to clipboard"
               >
                 {copied ? (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+                  <Check className="w-5 h-5" />
                 ) : (
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                    />
-                  </svg>
+                  <Copy className="w-5 h-5" />
                 )}
               </button>
             </div>
@@ -136,7 +113,10 @@ export default function StatsCard({ link }: StatsCardProps) {
             <div className="text-sm font-semibold text-blue-600 mb-1">
               Last Clicked
             </div>
-            <div className="text-sm font-bold text-blue-900 mt-1">
+            <div
+              className="text-sm font-bold text-blue-900 mt-1"
+              suppressHydrationWarning
+            >
               {formatDate(link.last_clicked)}
             </div>
           </div>
@@ -145,7 +125,10 @@ export default function StatsCard({ link }: StatsCardProps) {
             <div className="text-sm font-semibold text-emerald-600 mb-1">
               Created
             </div>
-            <div className="text-sm font-bold text-emerald-900 mt-1">
+            <div
+              className="text-sm font-bold text-emerald-900 mt-1"
+              suppressHydrationWarning
+            >
               {formatDate(link.created_at)}
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import LinksTable from "@/components/LinksTable";
 import LinkFormModal from "@/components/LinkFormModal";
 import { Link } from "@/lib/types";
+import { Plus, AlertCircle } from "lucide-react";
 
 export default function Dashboard() {
   const [links, setLinks] = useState<Link[]>([]);
@@ -58,19 +59,7 @@ export default function Dashboard() {
               onClick={() => setIsModalOpen(true)}
               className="btn-primary text-lg px-8 py-4 shadow-xl shadow-indigo-500/20 hover:shadow-indigo-500/40"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <Plus className="w-6 h-6" />
               Create New Link
             </button>
           </div>
@@ -95,19 +84,7 @@ export default function Dashboard() {
         {error && !loading && (
           <div className="bg-red-50 border border-red-100 rounded-2xl p-6 mb-8 flex items-center gap-4 animate-enter">
             <div className="p-3 bg-red-100 rounded-xl text-red-600">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <AlertCircle className="w-6 h-6" />
             </div>
             <div>
               <h3 className="text-lg font-semibold text-red-900">
